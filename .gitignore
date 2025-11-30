@@ -1,0 +1,21 @@
+# .env файлы
+.env
+.env.*
+
+# зависимости
+node_modules/
+
+# логи
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# сборка
+dist/
+build/
+
+# Docker артефакты
+*.pid
+*.seed
+*.pid.lock
