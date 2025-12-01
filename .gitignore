@@ -19,3 +19,5 @@ build/
 *.pid
 *.seed
 *.pid.lock
+
+public/js/uploads/

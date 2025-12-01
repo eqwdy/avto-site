@@ -79,6 +79,10 @@ requestValidation
       if (mailResult && tgResult) {
         goodAnswer("Всё прошло успешно!");
         request.reset();
+      } else if (mailResult) {
+        goodAnswer("Отправленно на почту!");
+      } else if (tgResult) {
+        goodAnswer("Отправленно на тг!");
       } else {
         badAnswer("Ошибка");
       }

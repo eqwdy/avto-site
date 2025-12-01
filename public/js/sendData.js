@@ -44,7 +44,7 @@ async function sendDataToTg(formData) {
 
     return 1;
   } catch (error) {
-    console.error(error);
+    console.error(`Throw to tg error: ${error}`);
     return 0;
   }
 }
