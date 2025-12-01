@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+Disallow: /server.js
+Disallow: /botApi
+Disallow: /admin/
+
+Sitemap: https://xn----82-53dkc5deutityk0kl.xn--p1ai/sitemap.xml
