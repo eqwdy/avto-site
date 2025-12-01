@@ -20,4 +20,5 @@ build/
 *.seed
 *.pid.lock
 
+# Картинки
 public/js/uploads/

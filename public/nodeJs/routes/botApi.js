@@ -1,26 +1,22 @@
 import express from "express";
-import cors from "cors";
 import multer from "multer";
 import fs from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
-import TelegramBot from "node-telegram-bot-api";
-import helmet from "helmet";
+import bot from "../bot.js";
 import dotenv from "dotenv";
+import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 dotenv.config();
 
-const app = express();
-app.use(helmet());
-app.use(cors());
+const router = express.Router();
 
 if (!fs.existsSync(path.join(__dirname, "uploads"))) {
   fs.mkdirSync(path.join(__dirname, "uploads"));
 }
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, path.join(__dirname, "uploads/")),
+  destination: (req, file, cb) => cb(null, path.join(__dirname, "uploads")),
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     cb(null, uniqueSuffix + "-" + file.originalname);
@@ -28,44 +24,30 @@ const storage = multer.diskStorage({
 });
 const upload = multer({
   storage,
+  limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (req, file, cb) => {
     if (file.mimetype.startsWith("image/")) cb(null, true);
     else cb(new Error("Incorrect MIME-type!"));
   },
 });
 
-app.use((err, req, res, next) => {
-  return res.status(400).json({ status: "error", errorType: err.message });
-});
+router.post("/", upload.array("file[]", 6), async (req, res) => {
+  console.log("Здесь!");
 
-const token = process.env.BOT_TOKEN;
-const chatId = process.env.BOT_CHATID;
-const bot = new TelegramBot(token, { polling: true });
-bot.setMyCommands([
-  { command: "getchatid", description: "Получить ID текущего чата" },
-]);
-bot.on("message", (msg) => {
-  if (msg.text === "/getchatid") {
-    bot.sendMessage(msg.chat.id, `Chat_ID: ${msg.chat.id}`);
-  }
-});
-// const bot = new TelegramBot(token);
-
-app.post("/botApi", upload.array("file[]", 6), async (req, res) => {
   const { name, tel, addres, mark, year, miles, transmission, engine, carId } =
     req.body;
-  if (!name) {
+  if (!name || name.trim().length < 1) {
     return res
       .status(400)
-      .json({ status: "error", errorType: `Missing field: name` });
+      .json({ status: "error", errorType: "Missing or empty name" });
   }
-  if (!tel) {
+  if (!tel || tel.trim().length < 6) {
     return res
       .status(400)
-      .json({ status: "error", errorType: `Missing field: tel` });
+      .json({ status: "error", errorType: "Missing or empty tel" });
   }
 
-  let msgBody = `📩 Новая заявка:\n Имя: ${name}\n Телефон: ${tel}`;
+  let msgBody = `📩  Новая заявка:\n Имя: ${name}\n Телефон: ${tel}`;
   if (addres) msgBody += `\n Адрес: ${addres}`;
   if (mark) msgBody += `\n Марка и модель автомобиля: ${mark}`;
   if (year) msgBody += `\n Год выпуска: ${year}`;
@@ -103,31 +85,15 @@ app.post("/botApi", upload.array("file[]", 6), async (req, res) => {
   });
   msgBody += `\n Время отправки: ${formattedTime}`;
 
+  const chatId = process.env.BOT_CHATID_DEV;
+  if (!chatId) {
+    console.error("BOT_CHATID_DEV не задан!");
+    return res
+      .status(500)
+      .json({ status: "error", errorType: "ChatId missing" });
+  }
   try {
     await bot.sendMessage(chatId, msgBody);
-
-    if (req.files && req.files.length > 0) {
-      for (const file of req.files) {
-        const maxFileSize = 5 * 1024 * 1024;
-        if (file.size > maxFileSize) {
-          return res.status(400).json({
-            status: "error",
-            errorType: "File size is too large",
-          });
-        }
-        await bot.sendPhoto(chatId, fs.createReadStream(file.path));
-
-        try {
-          await fs.promises.unlink(file.path);
-        } catch (err) {
-          console.error("Ошибка удаления файла:", err);
-          return res.json({
-            status: "error",
-            errorType: "Error in deleting file",
-          });
-        }
-      }
-    }
   } catch (err) {
     console.error("Ошибка отправки в Telegram:", err);
     return res.json({
@@ -136,10 +102,25 @@ app.post("/botApi", upload.array("file[]", 6), async (req, res) => {
     });
   }
 
+  if (req.files && req.files.length > 0) {
+    for (const file of req.files) {
+      try {
+        await bot.sendPhoto(chatId, fs.createReadStream(file.path));
+      } catch (err) {
+        console.error("Ошибка при отправке файла:", err);
+      } finally {
+        if (fs.existsSync(file.path)) {
+          try {
+            await fs.promises.unlink(file.path);
+          } catch (err) {
+            console.error("Ошибка удаления файла:", err);
+          }
+        }
+      }
+    }
+  }
+
   return res.json({ status: "success" });
 });
 
-const PORT = process.env.BOT_PORT || 3000;
-app.listen(PORT, () =>
-  console.log(`Server running on http://localhost:${PORT}`)
-);
+export default router;

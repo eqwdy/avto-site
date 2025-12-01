@@ -101,15 +101,6 @@ formValidation
       formData.append("file[]", file);
     });
 
-    // if (await sendDataToMail(formData)) {
-    //   goodAnswer("Всё прошло успешно!");
-    // form.reset();
-    // formFiles = [];
-    // formPreview.innerHTML = "";
-    // } else {
-    //   badAnswer("Ошибка");
-    // }
-
     try {
       const [mailResult, tgResult] = await Promise.all([
         sendDataToMail(formData),

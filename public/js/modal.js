@@ -78,11 +78,9 @@ requestValidation
 
       if (mailResult && tgResult) {
         goodAnswer("Всё прошло успешно!");
-        request.reset();
-      } else if (mailResult) {
-        goodAnswer("Отправленно на почту!");
-      } else if (tgResult) {
-        goodAnswer("Отправленно на тг!");
+        form.reset();
+        formFiles = [];
+        formPreview.innerHTML = "";
       } else {
         badAnswer("Ошибка");
       }
