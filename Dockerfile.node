@@ -1,0 +1,20 @@
+# Базовый образ Node.js
+FROM node:20-alpine
+
+# Рабочая директория внутри контейнера
+WORKDIR /usr/src/app
+
+# Копируем package.json и package-lock.json
+COPY package*.json ./
+
+# Устанавливаем зависимости (только продакшен)
+RUN npm install --production
+
+# Копируем весь проект
+COPY . .
+
+# Открываем порт (тот же, что в .env или docker-compose)
+EXPOSE 3000
+
+# Запускаем бота
+CMD ["node", "public/js/botApi.js"]

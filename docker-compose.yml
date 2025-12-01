@@ -5,6 +5,8 @@ services:
     build: .
     volumes:
       - .:/var/www
+    networks:
+      - appnet
 
   nginx:
     image: nginx:latest
@@ -15,6 +17,20 @@ services:
       - "80:80"
     depends_on:
       - php
+    networks:
+      - appnet
+
+  node:
+    build:
+      context: .
+      dockerfile: Dockerfile.node
+    working_dir: /usr/src/app
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "3000:3000"
+    networks:
+      - appnet
 
 networks:
   appnet:
