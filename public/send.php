@@ -96,7 +96,7 @@ if (!empty($data["engine"])) {
     ];
     $data["engine"] = $engineTypes[$data["engine"]] ?? "Что-то не так";
 }
-$data["time"] = date('d-m-Y H:i:s');
+$data["time"] = date('d-m-Y, H:i:s');
 
 $title = 'Заявка с сайта';
 $body  = "Имя: {$data['name']}<br>

@@ -69,10 +69,22 @@ requestValidation
   ])
   .onSuccess(async () => {
     let requestData = new FormData(request);
-    if (await sendDataToMail(requestData)) {
-      goodAnswer("Всё прошло успешно!");
-      request.reset();
-    } else {
-      badAnswer("Ошибка");
+
+    try {
+      const [mailResult, tgResult] = await Promise.all([
+        sendDataToMail(requestData),
+        sendDataToTg(requestData),
+      ]);
+
+      if (mailResult && tgResult) {
+        goodAnswer("Всё прошло успешно!");
+        form.reset();
+        formFiles = [];
+        formPreview.innerHTML = "";
+      } else {
+        badAnswer("Ошибка");
+      }
+    } catch (err) {
+      badAnswer("Ошибка: " + err.message);
     }
   });

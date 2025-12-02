@@ -38,7 +38,7 @@ formPreview.addEventListener("click", (event) => {
       formFiles.splice(index, 1);
     }
     item.remove();
-    console.log("Удалён элемент с индексом:", index);
+    // console.log("Удалён элемент с индексом:", index);
   }
 });
 
@@ -101,12 +101,21 @@ formValidation
       formData.append("file[]", file);
     });
 
-    if (await sendDataToMail(formData)) {
-      goodAnswer("Всё прошло успешно!");
-      form.reset();
-      formFiles = [];
-      formPreview.innerHTML = "";
-    } else {
-      badAnswer("Ошибка");
+    try {
+      const [mailResult, tgResult] = await Promise.all([
+        sendDataToMail(formData),
+        sendDataToTg(formData),
+      ]);
+
+      if (mailResult && tgResult) {
+        goodAnswer("Всё прошло успешно!");
+        form.reset();
+        formFiles = [];
+        formPreview.innerHTML = "";
+      } else {
+        badAnswer("Ошибка");
+      }
+    } catch (err) {
+      badAnswer("Ошибка: " + err.message);
     }
   });
