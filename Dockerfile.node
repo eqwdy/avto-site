@@ -17,4 +17,4 @@ COPY . .
 EXPOSE 3000
 
 # Запускаем бота
-CMD ["node", "public/nodeJs/server.js"]
+CMD ["node", "nodeJs/server.js"]
