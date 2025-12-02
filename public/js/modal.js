@@ -71,19 +71,21 @@ requestValidation
     let requestData = new FormData(request);
 
     try {
-      const [mailResult, tgResult] = await Promise.all([
-        sendDataToMail(requestData),
-        sendDataToTg(requestData),
-      ]);
-
-      if (mailResult && tgResult) {
+      const tgResult = await sendDataToTg(requestData);
+      if (tgResult) {
         goodAnswer("Всё прошло успешно!");
-        form.reset();
-        formFiles = [];
-        formPreview.innerHTML = "";
-      } else {
-        badAnswer("Ошибка");
+        request.reset();
+        return;
       }
+
+      const mailResult = await sendDataToMail(requestData);
+      if (mailResult) {
+        goodAnswer("Отправленно на почту!");
+        request.reset();
+        return;
+      }
+
+      badAnswer(Ошибка);
     } catch (err) {
       badAnswer("Ошибка: " + err.message);
     }
