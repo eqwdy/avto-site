@@ -32,8 +32,6 @@ const upload = multer({
 });
 
 router.post("/", upload.array("file[]", 6), async (req, res) => {
-  console.log("Здесь!");
-
   const { name, tel, addres, mark, year, miles, transmission, engine, carId } =
     req.body;
   if (!name || name.trim().length < 1) {
