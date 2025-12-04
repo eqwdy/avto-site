@@ -71,22 +71,20 @@ requestValidation
     let requestData = new FormData(request);
 
     try {
-      const tgResult = await sendDataToTg(requestData);
+      const { tgResult, mailResult } = Promise.all(
+        await sendDataToTg(requestData),
+        await sendDataToMail(requestData)
+      );
+
       if (tgResult) {
         goodAnswer("Всё прошло успешно!");
         request.reset();
+      } else if (mailResult) {
+        goodAnswer("Отправленно на почту!");
+        request.reset();
+      } else {
+        badAnswer(Ошибка);
       }
-
-      const mailResult = await sendDataToMail(requestData);
-      if (mailResult) {
-        if (!tgResult) {
-          goodAnswer("Отправленно на почту!");
-          request.reset();
-        }
-        return;
-      }
-
-      badAnswer(Ошибка);
     } catch (err) {
       badAnswer("Ошибка: " + err.message);
     }

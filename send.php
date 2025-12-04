@@ -131,8 +131,7 @@ try {
     $mail->Port = $_ENV['MAIL_PORT'];
 
     $mail->setFrom($_ENV['MAIL_FROM'], 'Заявка с сайта');
-    $mail->addAddress('fraksxx@gmail.com');
-    // $mail->addAddress('vikypavto82@mail.ru');
+    $mail->addAddress($_ENV['MAIL_TO']);
 
     $mail->isHTML(true);
     $mail->Subject = $title;

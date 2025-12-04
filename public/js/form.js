@@ -102,24 +102,20 @@ formValidation
     });
 
     try {
-      const tgResult = await sendDataToTg(formData);
+      const { tgResult, mailResult } = Promise.all(
+        await sendDataToTg(formData),
+        await sendDataToMail(formData)
+      );
+
       if (tgResult) {
         goodAnswer("Всё прошло успешно!");
-        form.reset();
-        formFiles = [];
-        formPreview.innerHTML = "";
+        request.reset();
+      } else if (mailResult) {
+        goodAnswer("Отправленно на почту!");
+        request.reset();
+      } else {
+        badAnswer(Ошибка);
       }
-
-      const mailResult = await sendDataToMail(formData);
-      if (mailResult) {
-        if (!tgResult) goodAnswer("Отправленно на почту!");
-        form.reset();
-        formFiles = [];
-        formPreview.innerHTML = "";
-        return;
-      }
-
-      badAnswer(Ошибка);
     } catch (err) {
       badAnswer("Ошибка: " + err.message);
     }

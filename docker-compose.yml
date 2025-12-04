@@ -14,7 +14,6 @@ services:
         condition: service_healthy
       node:
         condition: service_healthy
-        # condition: service_started
     networks:
       - appnet
 
@@ -55,15 +54,6 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
-
-#   certbot:
-#     image: certbot/certbot
-#     volumes:
-#       - ./certbot/conf:/etc/letsencrypt
-#       - ./certbot/www:/var/www/certbot
-#     networks:
-#       - appnet
-#     restart: "no"
 
 networks:
   appnet:
