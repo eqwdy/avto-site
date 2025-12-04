@@ -75,13 +75,14 @@ requestValidation
       if (tgResult) {
         goodAnswer("Всё прошло успешно!");
         request.reset();
-        return;
       }
 
       const mailResult = await sendDataToMail(requestData);
       if (mailResult) {
-        goodAnswer("Отправленно на почту!");
-        request.reset();
+        if (!tgResult) {
+          goodAnswer("Отправленно на почту!");
+          request.reset();
+        }
         return;
       }
 

@@ -38,7 +38,6 @@ formPreview.addEventListener("click", (event) => {
       formFiles.splice(index, 1);
     }
     item.remove();
-    // console.log("Удалён элемент с индексом:", index);
   }
 });
 
@@ -49,6 +48,7 @@ function createPreviewItem(e) {
   const formImg = document.createElement("img");
   formImg.src = e.target.result;
   formImg.classList.add("preview__item-img");
+  formImg.setAttribute("alt", "Ваше фото");
 
   const formItemDelete = document.createElementNS(
     "http://www.w3.org/2000/svg",
@@ -108,12 +108,11 @@ formValidation
         form.reset();
         formFiles = [];
         formPreview.innerHTML = "";
-        return;
       }
 
       const mailResult = await sendDataToMail(formData);
       if (mailResult) {
-        goodAnswer("Отправленно на почту!");
+        if (!tgResult) goodAnswer("Отправленно на почту!");
         form.reset();
         formFiles = [];
         formPreview.innerHTML = "";

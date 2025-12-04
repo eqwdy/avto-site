@@ -13,8 +13,8 @@ services:
       php:
         condition: service_healthy
       node:
-        # condition: service_healthy
-        condition: service_started
+        condition: service_healthy
+        # condition: service_started
     networks:
       - appnet
 
@@ -44,17 +44,17 @@ services:
       - "3000:3000"
     networks:
       - appnet
-    # healthcheck:
-    #   test:
-    #     [
-    #       "CMD",
-    #       "node",
-    #       "-e",
-    #       "require('http').get('http://localhost:3000/health')",
-    #     ]
-    #   interval: 10s
-    #   timeout: 5s
-    #   retries: 3
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "require('http').get('http://localhost:3000/health')",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
 #   certbot:
 #     image: certbot/certbot

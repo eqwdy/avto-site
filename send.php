@@ -2,13 +2,13 @@
 header('Content-Type: application/json; charset=utf-8');
 date_default_timezone_set('Europe/Simferopol');
 
-require dirname(__DIR__) . '/vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 
 use Dotenv\Dotenv;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-$dotenv = Dotenv::createImmutable(dirname(__DIR__));
+$dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -144,10 +144,10 @@ try {
         }
     }
 
-    //$mail->SMTPDebug = 2;
-    //$mail->Debugoutput = function ($str, $level) {
-    //    file_put_contents(__DIR__ . '/smtpForm.log', '[' . $level . '] ' . $str . PHP_EOL, FILE_APPEND | LOCK_EX);
-    //};
+    // $mail->SMTPDebug = 2;
+    // $mail->Debugoutput = function ($str, $level) {
+    //     file_put_contents(__DIR__ . '/smtpForm.log', '[' . $level . '] ' . $str . PHP_EOL, FILE_APPEND | LOCK_EX);
+    // };
 
     $mail->send();
 

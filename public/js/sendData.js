@@ -2,7 +2,7 @@ async function sendDataToMail(data) {
   try {
     let response = await fetch(
       //   "http://xn----82-53dkc5deutityk0kl.xn--p1ai/botApi",
-      "http://localhost:8000/mailApi",
+      "http://localhost/mailApi",
       {
         method: "POST",
         body: data,
@@ -31,7 +31,7 @@ async function sendDataToTg(formData) {
   try {
     let response = await fetch(
       //   "http://xn----82-53dkc5deutityk0kl.xn--p1ai/botApi",
-      "http://localhost:3000/botApi",
+      "http://localhost/botApi",
       {
         method: "POST",
         body: formData,
