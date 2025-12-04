@@ -1,3 +1,19 @@
+document.querySelectorAll(".input-effect__input").forEach((el) => {
+  const $wrapper = document.createElement("div");
+  $wrapper.classList.add("input-effect");
+
+  const $block = document.createElement("div");
+  $block.classList.add("input-effect__block");
+
+  const $inline = document.createElement("div");
+  $inline.classList.add("input-effect__inline");
+
+  el.parentNode.insertBefore($wrapper, el);
+  $wrapper.appendChild(el);
+  $wrapper.appendChild($block);
+  $wrapper.appendChild($inline);
+});
+
 document.querySelectorAll(".input-effect").forEach((el) => {
   el.style.maxHeight =
     el.querySelector(".input-effect__input").offsetHeight + "px";

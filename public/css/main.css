@@ -59,6 +59,7 @@
   padding: 0.2rem 0.5rem;
   outline: none;
   width: 100%;
+  max-width: 300px;
 }
 .input-effect__block,
 .input-effect__inline {

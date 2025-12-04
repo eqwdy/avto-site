@@ -111,7 +111,7 @@ formValidation
         goodAnswer("Всё прошло успешно!");
         request.reset();
       } else if (mailResult) {
-        goodAnswer("Отправленно на почту!");
+        goodAnswer("Всё прошло успешно!");
         request.reset();
       } else {
         badAnswer(Ошибка);
