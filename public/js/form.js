@@ -102,17 +102,21 @@ formValidation
     });
 
     try {
-      const { tgResult, mailResult } = Promise.all(
-        await sendDataToTg(formData),
-        await sendDataToMail(formData)
-      );
+      const [tgResult, mailResult] = await Promise.all([
+        sendDataToTg(formData),
+        sendDataToMail(formData),
+      ]);
 
       if (tgResult) {
         goodAnswer("Всё прошло успешно!");
-        request.reset();
+        form.reset();
+        formFiles = [];
+        formPreview.innerHTML = "";
       } else if (mailResult) {
         goodAnswer("Всё прошло успешно!");
-        request.reset();
+        form.reset();
+        formFiles = [];
+        formPreview.innerHTML = "";
       } else {
         badAnswer(Ошибка);
       }

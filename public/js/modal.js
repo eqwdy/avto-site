@@ -71,10 +71,10 @@ requestValidation
     let requestData = new FormData(request);
 
     try {
-      const { tgResult, mailResult } = Promise.all(
-        await sendDataToTg(requestData),
-        await sendDataToMail(requestData)
-      );
+      const [tgResult, mailResult] = await Promise.all([
+        sendDataToTg(requestData),
+        sendDataToMail(requestData),
+      ]);
 
       if (tgResult) {
         goodAnswer("Всё прошло успешно!");

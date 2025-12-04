@@ -7,8 +7,6 @@ let bot;
 if (!bot) {
   bot = new TelegramBot(token, { polling: true });
 }
-// const bot = new TelegramBot(token);
-// bot.setWebHook("https://xn----82-53dkc5deutityk0kl.xn--p1ai/botApi");
 
 bot.setMyCommands([
   { command: "getchatid", description: "Получить ID текущего чата" },
