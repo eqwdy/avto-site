@@ -83,9 +83,9 @@ router.post("/", upload.array("file[]", 6), async (req, res) => {
   });
   msgBody += `\n Время отправки: ${formattedTime}`;
 
-  const chatId = process.env.BOT_CHATID_DEV;
+  const chatId = process.env.BOT_CHATID;
   if (!chatId) {
-    console.error("BOT_CHATID_DEV не задан!");
+    console.error("BOT_CHATID не задан!");
     return res
       .status(500)
       .json({ status: "error", errorType: "ChatId missing" });

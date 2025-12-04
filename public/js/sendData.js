@@ -1,9 +1,13 @@
 async function sendDataToMail(data) {
   try {
-    let response = await fetch("/send.php", {
-      method: "POST",
-      body: data,
-    });
+    let response = await fetch(
+      //   "http://xn----82-53dkc5deutityk0kl.xn--p1ai/botApi",
+      "http://localhost:8000/mailApi",
+      {
+        method: "POST",
+        body: data,
+      }
+    );
 
     if (!response.ok) {
       throw new Error(response.status);
@@ -25,10 +29,14 @@ async function sendDataToMail(data) {
 
 async function sendDataToTg(formData) {
   try {
-    let response = await fetch("http://localhost:3000/botApi", {
-      method: "POST",
-      body: formData,
-    });
+    let response = await fetch(
+      //   "http://xn----82-53dkc5deutityk0kl.xn--p1ai/botApi",
+      "http://localhost:3000/botApi",
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
 
     if (!response.ok) {
       throw new Error(response.status);
