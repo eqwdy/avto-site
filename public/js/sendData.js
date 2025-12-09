@@ -14,8 +14,6 @@ async function sendDataToMail(data) {
     }
 
     let answer = await response.json();
-    // let answer = await response.text();
-    // console.log(answer);
     if (answer.status === "error") {
       throw new Error(answer.errorType);
     }
@@ -43,9 +41,6 @@ async function sendDataToTg(formData) {
     }
 
     let answer = await response.json();
-    // let answer = await response.text();
-    // console.log(answer);
-
     if (answer.status === "error") {
       throw new Error(answer.errorType);
     }
